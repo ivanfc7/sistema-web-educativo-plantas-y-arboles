@@ -5,8 +5,8 @@ Aplicación web desarrollada como proyecto de grado. Implementa una arquitectura
 
 ## Arquitectura
 
--Frontend: React
--Backend: Django / Django REST Framework
--Base de datos (desarrollo): SQLite
--Comunicación: API REST
--Control de versiones: Git
+- Frontend: React
+- Backend: Django / Django REST Framework
+- Base de datos (desarrollo): SQLite
+- Comunicación: API REST
+- Control de versiones: Git
