@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import environ
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -42,6 +43,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'sistemaWeb'
 ]
 
@@ -131,7 +134,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
+    'http://127.0.0.1:5173',
 ]
+CORS_ALLOW_CREDENTIALS = True
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -147,3 +152,27 @@ EMAIL_PORT = env.int("EMAIL_PORT")
 EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS")
 EMAIL_HOST_USER = env.str("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD")
+
+
+SIMPLE_JWT = {
+    # El Access Token es el que viaja en cada petición (Header Authorization)
+    # Es mejor que sea de vida corta por seguridad.
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60), 
+
+    # ESTA ES LA CLAVE: El Refresh Token es el que guardas en la Cookie.
+    # Es el que permite generar nuevos Access Tokens sin pedir login.
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30), 
+
+    # Si se pone en True, cada vez que el usuario use el Refresh Token para 
+    # obtener un Access Token, se le entregará también un nuevo Refresh Token
+    # renovando así los 30 días de vida (Sesión infinita mientras la use).
+    'ROTATE_REFRESH_TOKENS': False,
+
+    # Esto hace que el token viejo deje de funcionar al rotar.
+    'BLACKLIST_AFTER_ROTATION': True,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+}

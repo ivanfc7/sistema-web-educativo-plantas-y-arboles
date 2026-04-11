@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from ..models import Planta, AporteAmbiental
 from django.db.models import Sum
 
@@ -31,7 +32,7 @@ def register(request):
     return Response(nuevoUser.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
-@authentication_classes([TokenAuthentication])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def profile(request):
     elId = request.user.id
@@ -41,19 +42,23 @@ def profile(request):
     return Response({"id":elId , "firstName": nombre, "lastName": apellidos, "email": correo},status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-@authentication_classes([TokenAuthentication])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def totalPlantas(request):
     user = request.user
     total = Planta.objects.filter(usuario=user).count()
+    if not total:
+        total = 0
     return Response({'total': total},status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-@authentication_classes([TokenAuthentication])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def totalAportes(request):
     user = request.user
     total = AporteAmbiental.objects.filter(planta__usuario=user).aggregate(
         totalOxigeno = Sum('oxigenoTotal')
     )
+    if not total:
+        total = [0]
     return Response({"total":total["totalOxigeno"] or 0}, status=status.HTTP_200_OK)

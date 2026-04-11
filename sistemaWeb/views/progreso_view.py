@@ -9,12 +9,13 @@ from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 class ProgresoVista(viewsets.ModelViewSet):
     serializer_class = ProgresoSerializer
     queryset = ProgresoJuego.objects.all()
     permission_classes = [IsAuthenticated]
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [JWTAuthentication]
 
     def get_queryset(self):
         return ProgresoJuego.objects.filter(usuario=self.request.user)
