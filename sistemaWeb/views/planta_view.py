@@ -1,16 +1,16 @@
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from ..models import Planta
 from ..serializer import PlantaSerializer
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 class PlantaVista(viewsets.ModelViewSet):
     queryset = Planta.objects.all()  
     serializer_class = PlantaSerializer
     permission_classes = [IsAuthenticated]
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [JWTAuthentication]
 
     def get_queryset(self):
         return Planta.objects.filter(usuario=self.request.user)

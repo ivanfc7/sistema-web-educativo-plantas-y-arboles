@@ -13,10 +13,7 @@ def magic_link(request):
     nombre = request.data.get("first_name")
 
     if not email:
-        return Response(
-            {"error": "Email requerido"},
-            status=status.HTTP_400_BAD_REQUEST
-        )
+        return Response( {"error": "Email requerido"}, status=status.HTTP_400_BAD_REQUEST )
     
     user, created = User.objects.get_or_create(
         username=email,
@@ -28,7 +25,6 @@ def magic_link(request):
         user.save()
 
     token = generar_magic_token(email)
-
     link = f"http://127.0.0.1:5173/verify-magic/{token}"
 
     try:
@@ -56,16 +52,12 @@ def verify_magic(request):
         )
 
     # Buscamos al usuario. 
-    # Usamos get_or_create aquí también por seguridad, 
-    # así recuperamos el valor de 'created' localmente.
     user, created = User.objects.get_or_create(
         username=email,
         defaults={"email": email}
     )
 
     refresh = RefreshToken.for_user(user)
-
-    # Ahora 'created' ya existe en este contexto
     response = JsonResponse({
         "access": str(refresh.access_token),
         "is_new_user": created
@@ -79,5 +71,4 @@ def verify_magic(request):
         samesite="Lax",
         max_age=60 * 60 * 24 * 30
     )
-
     return response

@@ -145,7 +145,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# Configurar servidor de correo
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = env.str("EMAIL_HOST")
 EMAIL_PORT = env.int("EMAIL_PORT")
@@ -153,19 +153,14 @@ EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS")
 EMAIL_HOST_USER = env.str("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD")
 
-
 SIMPLE_JWT = {
     # El Access Token es el que viaja en cada petición (Header Authorization)
-    # Es mejor que sea de vida corta por seguridad.
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60), 
 
-    # ESTA ES LA CLAVE: El Refresh Token es el que guardas en la Cookie.
-    # Es el que permite generar nuevos Access Tokens sin pedir login.
+    # Refresh Token de la cookie. Es el que permite generar nuevos Access Tokens sin pedir login.
     'REFRESH_TOKEN_LIFETIME': timedelta(days=30), 
 
-    # Si se pone en True, cada vez que el usuario use el Refresh Token para 
-    # obtener un Access Token, se le entregará también un nuevo Refresh Token
-    # renovando así los 30 días de vida (Sesión infinita mientras la use).
+    # True para mantener la sesion en 30 dias 
     'ROTATE_REFRESH_TOKENS': False,
 
     # Esto hace que el token viejo deje de funcionar al rotar.
