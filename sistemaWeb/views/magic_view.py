@@ -15,10 +15,15 @@ def magic_link(request):
     if not email:
         return Response( {"error": "Email requerido"}, status=status.HTTP_400_BAD_REQUEST )
     
-    user, created = User.objects.get_or_create(
-        username=email,
-        defaults={"email": email, "first_name": nombre}
-    )
+    if nombre is None:
+        user, created = User.objects.get_or_create(
+            username=email,
+        )
+    else:
+        user, created = User.objects.get_or_create(
+            username=email,
+            defaults={"email": email, "first_name": nombre}
+        )
 
     if not created and nombre:
         user.first_name = nombre

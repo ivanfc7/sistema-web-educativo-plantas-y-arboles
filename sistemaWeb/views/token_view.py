@@ -13,5 +13,5 @@ class MyTokenRefreshView(TokenRefreshView):
             response = super().post(request, *args, **kwargs)
             return response
         except Exception as e:
-            print(f"ERROR REAL EN REFRESH: {e}") # Mira tu terminal de Django
+            print(f"ERROR REAL EN REFRESH: {e}")
             return Response({"error": str(e)}, status=401)
