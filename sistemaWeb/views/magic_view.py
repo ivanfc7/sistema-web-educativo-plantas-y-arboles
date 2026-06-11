@@ -30,7 +30,7 @@ def magic_link(request):
         user.save()
 
     token = generar_magic_token(email)
-    link = f"http://127.0.0.1:5173/verify-magic/{token}"
+    link = f"https://sistema-web-educativo-plantas-arbol.vercel.app/verify-magic/{token}"
 
     try:
         send_mail(
