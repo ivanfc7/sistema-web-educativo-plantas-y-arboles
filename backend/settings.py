@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-r#4nee1d%2%iyu(9em2jbh7^5c+-)7h+@x5hd1h3k*t_)tum=z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.render.com']
 
 
 # Application definition
@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -133,7 +134,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
-    'http://127.0.0.1:5173',
+    'http://127.0.0.1:5173', 'https://sistema-web-educativo-plantas-arbol.vercel.app'
 ]
 CORS_ALLOW_CREDENTIALS = True
 
