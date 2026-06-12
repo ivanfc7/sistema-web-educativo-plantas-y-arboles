@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-r#4nee1d%2%iyu(9em2jbh7^5c+-)7h+@x5hd1h3k*t_)tum=z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.onrender.com']
+ALLOWED_HOSTS = ['https://sistema-web-educativo-plantas-y-arboles-ntfs.onrender.com']
 
 
 # Application definition
