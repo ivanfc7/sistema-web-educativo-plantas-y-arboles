@@ -1,4 +1,3 @@
-from django.core.mail import send_mail
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -6,6 +5,7 @@ from ..resources.magic import generar_magic_token, verify_magic_token
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.http import JsonResponse
+import os
 import resend
 from django.conf import settings
 
@@ -43,7 +43,7 @@ def magic_link(request):
         #     [email],
         # )
         params = {
-            "from": "ivanflores521111@gmail.com", # Remitente gratuito de prueba de Resend
+            "from": "onboarding@resend.dev", # Remitente gratuito de prueba de Resend
             "to": email, # Tu correo donde quieres que llegue
             "subject": "Tu link de acceso - Sistema Educativo de plantas y arboles",
             "html": f"<strong>¡Hola!</strong> Ingresa a este link para verificar tu usuario y activar la cuenta: <a href='{link}'>Haz clic aquí</a>",
@@ -52,7 +52,8 @@ def magic_link(request):
         email_output = resend.Emails.send(params)
         print('enviando '+email_output)
         return Response({"success": "Correo enviado"}, status=status.HTTP_200_OK)
-    except:
+    except Exception as e:
+        print("Error en resednd" + e)
         return Response({"error": "Correo no fue enviado"}, status=status.HTTP_400_BAD_REQUEST)
         raise
 
