@@ -6,6 +6,8 @@ from ..resources.magic import generar_magic_token, verify_magic_token
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.http import JsonResponse
+import resend
+from django.conf import settings
 
 @api_view(["POST"])
 def magic_link(request):
@@ -31,15 +33,24 @@ def magic_link(request):
 
     token = generar_magic_token(email)
     link = f"https://sistema-web-educativo-plantas-arbol.vercel.app/verify-magic/{token}"
+    resend.api_key = settings.RESEND_API_KEY
 
     try:
-        send_mail(
-            "Verificar usuario",
-            f"Ingresa a este link para verificar tu usuario y activar la cuenta: {link}",
-            "ivanflores521111@gmail.com",
-            [email],
-        )
-        print('enviando')
+        # send_mail(
+        #     "Verificar usuario",
+        #     f"Ingresa a este link para verificar tu usuario y activar la cuenta: {link}",
+        #     "ivanflores521111@gmail.com",
+        #     [email],
+        # )
+        params = {
+            "from": "ivanflores521111@gmail.com", # Remitente gratuito de prueba de Resend
+            "to": email, # Tu correo donde quieres que llegue
+            "subject": "Tu link de acceso - Sistema Educativo de plantas y arboles",
+            "html": f"<strong>¡Hola!</strong> Ingresa a este link para verificar tu usuario y activar la cuenta: <a href='{link}'>Haz clic aquí</a>",
+        }
+        
+        email_output = resend.Emails.send(params)
+        print('enviando '+email_output)
         return Response({"success": "Correo enviado"}, status=status.HTTP_200_OK)
     except:
         return Response({"error": "Correo no fue enviado"}, status=status.HTTP_400_BAD_REQUEST)
