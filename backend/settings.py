@@ -147,14 +147,11 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Configurar servidor de correo
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = os.environ.get("EMAIL_HOST") or env.str("EMAIL_HOST")
-EMAIL_PORT = int(os.environ.get("EMAIL_PORT") or env.int("EMAIL_PORT"))
-
-# Esto asegura que si Render devuelve el texto "True", Python lo convierta en un Booleano real
-EMAIL_USE_TLS = str(os.environ.get("EMAIL_USE_TLS") or env.str("EMAIL_USE_TLS")).lower() in ['true', '1', 'yes']
-
-EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER") or env.str("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD") or env.str("EMAIL_HOST_PASSWORD")
+EMAIL_HOST = env.str("EMAIL_HOST")
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = env.str("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD")
 
 SIMPLE_JWT = {
     # El Access Token es el que viaja en cada petición (Header Authorization)
